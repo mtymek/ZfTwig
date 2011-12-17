@@ -4,7 +4,6 @@ namespace ZfTwig;
 
 use Zend\View\Renderer as ZendViewRenderer,
     Zend\View\TemplateResolver,
-    Zend\View\HelperBroker,
     Zend\Filter\FilterChain,
     InvalidArgumentException;
 
@@ -20,13 +19,6 @@ class Renderer implements ZendViewRenderer
      * @var Zend\Filter\FilterChain
      */
     protected $filterChain;
-
-    /**
-     * Helper broker
-     *
-     * @var HelperBroker
-     */
-    protected $helperBroker;
 
     /**
      * Set filter chain
@@ -54,64 +46,24 @@ class Renderer implements ZendViewRenderer
     }
 
     /**
-     * Retrieve template name or template resolver
-     *
-     * @param  null|string $name
-     * @return string|TemplateResolver
+     * @param TwigEnvironment $environment
      */
-    public function resolver($name = null)
+    public function setEnvironment($environment)
     {
-        if (null === $this->templateResolver) {
-            $this->setResolver(new TemplatePathStack());
-        }
-
-        if (null !== $name) {
-            return $this->templateResolver->getScriptPath($name);
-        }
-
-        return $this->templateResolver;
+        $this->environment = $environment;
     }
 
     /**
-     * Set script resolver
-     *
-     * @param  string|TemplateResolver $resolver
-     * @param  mixed $options
-     * @return PhpRenderer
-     * @throws InvalidArgumentException
+     * @return TwigEnvironment
      */
-    public function setResolver($resolver, $options = null)
+    public function getEnvironment()
     {
-        if (is_string($resolver)) {
-            if (!class_exists($resolver)) {
-                throw new InvalidArgumentException('Class passed as resolver could not be found');
-            }
-            $resolver = new $resolver($options);
-        }
-        if (!$resolver instanceof TemplateResolver) {
-            throw new InvalidArgumentException(sprintf(
-                'Expected resolver to implement TemplateResolver; received "%s"',
-                (is_object($resolver) ? get_class($resolver) : gettype($resolver))
-            ));
-        }
-        $this->templateResolver = $resolver;
-        return $this;
-    }
-
-    /**
-     * @return ZfTwig\Environment
-     */
-    public function environment()
-    {
-        if (null === $this->environment) {
-            $loader = new TemplateLoader($this->resolver());
-            $this->environment = new TwigEnvironment($this, $loader, array(
-                'cache' => __DIR__ . '/../../../../data/cache',
-                'auto_reload' => true,
-                'debug' => true
-            ));
-        }
         return $this->environment;
+    }
+
+    public function __construct(TwigEnvironment $environment)
+    {
+        $this->setEnvironment($environment);
     }
 
     /**
@@ -123,7 +75,10 @@ class Renderer implements ZendViewRenderer
      */
     public function render($name, $vars = null)
     {
-        $content = $this->environment()->render($name, (array)$vars);
+        // Ideally this would be set by Zend\Di...
+        $this->getEnvironment()->getBroker()->setView($this);
+
+        $content = $this->getEnvironment()->render($name, (array)$vars);
         return $this->getFilterChain()->filter($content); // filter output
     }
 
@@ -150,48 +105,6 @@ class Renderer implements ZendViewRenderer
      */
     public function plugin($name, array $options = null)
     {
-        return $this->getBroker()->load($name, $options);
-    }
-
-    /**
-     * Set plugin broker instance
-     *
-     * @param  string|HelperBroker $broker
-     * @return Zend\View\Abstract
-     * @throws InvalidArgumentException
-     */
-    public function setBroker($broker)
-    {
-        if (is_string($broker)) {
-            if (!class_exists($broker)) {
-                throw new InvalidArgumentException(sprintf(
-                    'Invalid helper broker class provided (%s)',
-                    $broker
-                ));
-            }
-            $broker = new $broker();
-        }
-        if (!$broker instanceof HelperBroker) {
-            throw new InvalidArgumentException(sprintf(
-                'Helper broker must extend Zend\View\HelperBroker; got type "%s" instead',
-                (is_object($broker) ? get_class($broker) : gettype($broker))
-            ));
-        }
-        $broker->setView($this);
-        $this->helperBroker = $broker;
-    }
-
-
-    /**
-     * Get plugin broker instance
-     *
-     * @return HelperBroker
-     */
-    public function getBroker()
-    {
-        if (null === $this->helperBroker) {
-            $this->setBroker(new HelperBroker());
-        }
-        return $this->helperBroker;
+        return $this->getEnvironment()->getBroker()->load($name, $options);
     }
 }

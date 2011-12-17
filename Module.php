@@ -8,6 +8,9 @@ use Zend\Module\Manager,
 
 class Module implements AutoloaderProvider
 {
+    protected $view;
+    protected $viewListener;
+
     public function getAutoloaderConfig()
     {
         return array(
@@ -29,8 +32,14 @@ class Module implements AutoloaderProvider
     {
         return include __DIR__ . '/config/module.config.php';
     }
-    
-    /*public function initializeView($e)
+
+    public function init(Manager $moduleManager)
+    {
+        $events = StaticEventManager::getInstance();
+        $events->attach('bootstrap', 'bootstrap', array($this, 'initializeView'), 100);
+    }
+
+    public function initializeView($e)
     {
         $app          = $e->getParam('application');
         $locator      = $app->getLocator();
@@ -39,7 +48,6 @@ class Module implements AutoloaderProvider
         $viewListener = $this->getViewListener($view, $config);
         $app->events()->attachAggregate($viewListener);
         $events       = StaticEventManager::getInstance();
-        $viewListener->registerStaticListeners($events, $locator);
     }
 
     protected function getViewListener($view, $config)
@@ -48,7 +56,7 @@ class Module implements AutoloaderProvider
             return $this->viewListener;
         }
 
-        $viewListener       = new View\Listener($view, $config->layout);
+        $viewListener       = new View\Listener($view, $config['layout']);
         $viewListener->setDisplayExceptionsFlag($config->display_exceptions);
 
         $this->viewListener = $viewListener;
@@ -63,13 +71,8 @@ class Module implements AutoloaderProvider
 
         $di     = $app->getLocator();
         $view   = $di->get('view');
-        $url    = $view->plugin('url');
-        $url->setRouter($app->getRouter());
 
-        $view->plugin('headTitle')->setSeparator(' - ')
-                                  ->setAutoEscape(false)
-                                  ->append('Application');
         $this->view = $view;
         return $view;
-    }*/
+    }
 }
