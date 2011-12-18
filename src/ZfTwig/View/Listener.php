@@ -40,8 +40,8 @@ class Listener implements ListenerAggregate
     public function attach(EventCollection $events)
     {
         $this->listeners[] = $events->attach('dispatch.error', array($this, 'renderError'));
-        $this->listeners[] = $events->attach('dispatch', array($this, 'render404'), -1000);
         $this->listeners[] = $events->attach('dispatch', array($this, 'renderView'), -50);
+        $this->listeners[] = $events->attach('dispatch', array($this, 'render404'), -1000);
     }
 
     public function detach(EventCollection $events)
@@ -50,15 +50,6 @@ class Listener implements ListenerAggregate
             $events->detach($listener);
             unset($this->listeners[$key]);
             unset($listener);
-        }
-    }
-
-    public function detachStaticListeners(StaticEventCollection $events)
-    {
-        foreach ($this->staticListeners as $i => $info) {
-            list($id, $handler) = $info;
-            $events->detach($id, $handler);
-            unset($this->staticListeners[$i]);
         }
     }
 
