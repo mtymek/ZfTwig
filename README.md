@@ -4,8 +4,10 @@ ZfTwig Module
 This Zend Framework 2 module allows you to use Twig (http://twig.sensiolabs.org/) templates in your projects.
 It supports Zend view helpers:
 
+    ````
     {{ headTitle() }}
     {{ url({ "some_key": "some_val" }) }}
+    ```
 
 Installation
 ------------
@@ -18,7 +20,7 @@ Installation
 
 2. Update application.config.php by adding ZfTwig module, so that it will look more or less like this:
 
-
+    ```
     <?php
     return array(
         'modules' => array(
@@ -34,6 +36,7 @@ Installation
             ),
         ),
     );
+    ```
 
 3. ZfTwig is shipped with custom view listener, so main application module only needs to do
 some basic setup:
