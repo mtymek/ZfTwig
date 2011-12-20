@@ -42,12 +42,10 @@ class Module implements AutoloaderProvider
     public function initializeView($e)
     {
         $app          = $e->getParam('application');
-        $locator      = $app->getLocator();
         $config       = $e->getParam('config');
         $view         = $this->getView($app);
         $viewListener = $this->getViewListener($view, $config);
         $app->events()->attachAggregate($viewListener);
-        $events       = StaticEventManager::getInstance();
     }
 
     protected function getViewListener($view, $config)
