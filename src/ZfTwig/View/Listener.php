@@ -3,10 +3,8 @@
 namespace ZfTwig\View;
 
 use ArrayAccess,
-    Zend\Di\Locator,
     Zend\EventManager\EventCollection,
     Zend\EventManager\ListenerAggregate,
-    Zend\EventManager\StaticEventCollection,
     Zend\Http\PhpEnvironment\Response,
     Zend\Mvc\Application,
     Zend\Mvc\MvcEvent,
@@ -108,7 +106,6 @@ class Listener implements ListenerAggregate
     public function renderError(MvcEvent $e)
     {
         $error    = $e->getError();
-        $app      = $e->getTarget();
         $response = $e->getResponse();
         if (!$response) {
             $response = new Response();

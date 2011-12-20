@@ -3,10 +3,7 @@
 namespace ZfTwig;
 
 use Zend\View\Renderer as ZendViewRenderer,
-    Zend\View\TemplateResolver,
-    Zend\Filter\FilterChain,
-    InvalidArgumentException;
-
+    Zend\Filter\FilterChain;
 
 class Renderer implements ZendViewRenderer
 {
