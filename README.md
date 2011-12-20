@@ -38,7 +38,7 @@ Installation
 3. ZfTwig is shipped with custom view listener, so main application module only needs to do
 some basic setup:
 
-
+    ```
     public function init(Manager $moduleManager)
     {
         $events = StaticEventManager::getInstance();
@@ -63,6 +63,7 @@ some basic setup:
                                           ->setAutoEscape(false)
                                           ->append('Application');
     }
+    ```
 
 
 After finishing this 3 steps, you can start using twig templates in your project.
