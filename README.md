@@ -9,12 +9,13 @@ It supports Zend view helpers:
 
 
 Installation
-============
+------------
 
 1. Add ZfTwig to your module directory:
 
     cd MyApplication/module
     git submodule add git@github.com:mtymek/ZfTwig.git module/ZfTwig
+
 
 2. Update application.config.php by adding ZfTwig module, so that it will look more or less like this:
 
@@ -62,6 +63,7 @@ some basic setup:
                                           ->setAutoEscape(false)
                                           ->append('Application');
     }
+
 
 After finishing this 3 steps, you can start using twig templates in your project.
 
