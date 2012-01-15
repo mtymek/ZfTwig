@@ -88,4 +88,13 @@ class TwigEnvironment extends \Twig_Environment
 
         return $function;
     }
+
+    public function render($name, array $context = array())
+    {
+        // clear globals so they will be constructed again on each render
+        // without this code you can't add new global between two calls to render()
+        $this->globals = null;
+
+        return parent::render($name, $context);
+    }
 }
