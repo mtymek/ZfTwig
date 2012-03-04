@@ -5,12 +5,12 @@ namespace ZfTwig;
 class ViewHelperFunction extends \Twig_Function
 {
     protected $name;
-    protected $helper;
+    protected $broker;
 
-    public function __construct($name, $helper)
+    public function __construct($name, $broker)
     {
         $this->name = $name;
-        $this->helper = $helper;
+        $this->broker = $broker;
     }
 
     public function getSafe(\Twig_Node $functionArgs)
@@ -20,6 +20,7 @@ class ViewHelperFunction extends \Twig_Function
 
     public function compile()
     {
+
         $name = preg_replace('#[^a-z0-9]+#i', '', $this->name);
         return '$this->env->plugin("' . $name . '")->__invoke';
     }

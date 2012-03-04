@@ -2,9 +2,7 @@
 
 namespace ZfTwig;
 
-use Zend\View\TemplatePathStack;
-
-class TemplateLoader extends TemplatePathStack implements \Twig_LoaderInterface
+class TemplateLoader implements \Twig_LoaderInterface
 {
 
     /**
@@ -14,9 +12,9 @@ class TemplateLoader extends TemplatePathStack implements \Twig_LoaderInterface
      *
      * @return string The template source code
      */
-    public function getSource($name)
+    function getSource($name)
     {
-        return file_get_contents($this->getScriptPath($name));
+        return file_get_contents($name);
     }
 
     /**
@@ -26,9 +24,9 @@ class TemplateLoader extends TemplatePathStack implements \Twig_LoaderInterface
      *
      * @return string The cache key
      */
-    public function getCacheKey($name)
+    function getCacheKey($name)
     {
-        return $this->getScriptPath($name);
+        return $name;
     }
 
     /**
@@ -38,8 +36,8 @@ class TemplateLoader extends TemplatePathStack implements \Twig_LoaderInterface
      * @param timestamp $time The last modification time of the cached template
      * @return bool
      */
-    public function isFresh($name, $time)
+    function isFresh($name, $time)
     {
-        return filemtime($this->getScriptPath($name)) < $time;
+        return filemtime($name) < $time;
     }
 }

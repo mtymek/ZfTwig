@@ -3,15 +3,15 @@
 return array(
     'di' => array(
         'instance' => array(
-            'alias' => array(
+            /*'alias' => array(
                 'view'  => 'ZfTwig\Renderer',
-            ),
-            'ZfTwig\Renderer' => array(
+            ),*/
+            /*'ZfTwig\Renderer' => array(
                 'parameters' => array(
                     'environment' => 'ZfTwig\TwigEnvironment'
                 ),
-            ),
-            'ZfTwig\TwigEnvironment' => array(
+            ),*/
+            /*'ZfTwig\TwigEnvironment' => array(
                 'parameters' => array(
                     'loader' => 'ZfTwig\TemplateLoader',
                     'broker' => 'Zend\View\HelperBroker',
@@ -21,7 +21,7 @@ return array(
                         'debug' => true
                     )
                 )
-            )
+            )*/
         )
     )
 );
