@@ -4,23 +4,22 @@ ZfTwig Module
 This Zend Framework 2 module allows you to use Twig (http://twig.sensiolabs.org/) templates in your projects.
 It supports Zend view helpers:
 
-    ````
+```
     {{ headTitle() }}
     {{ url({ "some_key": "some_val" }) }}
-    ```
+```
 
 Installation
 ------------
 
-1. Add ZfTwig to your module directory:
+1. Add ZfTwig to your vendor directory
 
+    cd MyApplicationDirectory
+    git submodule add git@github.com:mtymek/ZfTwig.git vendor/ZfTwig
 
-    cd MyApplication/module
-    git submodule add git@github.com:mtymek/ZfTwig.git module/ZfTwig
+2. Add ZfTwig to your application.config.php file:
 
-2. Update application.config.php by adding ZfTwig module, so that it will look more or less like this:
-
-    ```
+```php
     <?php
     return array(
         'modules' => array(
@@ -36,12 +35,11 @@ Installation
             ),
         ),
     );
-    ```
+```
 
-3. ZfTwig is shipped with custom view listener, so main application module only needs to do
-some basic setup:
+3. Configure TwigRenderingStrategy in Module.php:
 
-    ```
+```php
     public function init(Manager $moduleManager)
     {
         $events = StaticEventManager::getInstance();
@@ -51,24 +49,56 @@ some basic setup:
     public function initializeView($e)
     {
         $app          = $e->getParam('application');
+        $basePath     = $app->getRequest()->getBasePath();
         $locator      = $app->getLocator();
-        $view         = $locator->get('view');
+        $renderer     = $locator->get('ZfTwig\TwigRenderer');
+        $renderer->plugin('basePath')->setBasePath($basePath);
 
-        // tell ZfTwig where it should look for view scripts
-        $view->getEnvironment()->getLoader()->addPath(__DIR__ . '/views');
-
-        // setup url relper
-        $url = $view->plugin('url');
-        $url->setRouter($app->getRouter());
-
-        // set default page title
-        $view->plugin('headTitle')->setSeparator(' - ')
-                                          ->setAutoEscape(false)
-                                          ->append('Application');
+        $view         = $locator->get('Zend\View\View');
+        $twigStrategy = $locator->get('ZfTwig\TwigRenderingStrategy');
+        $view->events()->attach($twigStrategy, 100);
     }
-    ```
+```
 
+4. Configure Dependency Injection Container:
 
-After finishing this 3 steps, you can start using twig templates in your project.
+```php
+    return array(
+        'di' => array(
+            'instance' => array(
 
-Full example can be found here: https://github.com/mtymek/ZfTwigExample
+                // setup other stuff...
+                // ...
+
+                // setup view script resolvers - very similar to configuration
+                // from ZendSkeletonApplication
+                'Zend\View\Resolver\AggregateResolver' => array(
+                    'injections' => array(
+                        'Zend\View\Resolver\TemplateMapResolver',
+                        'Zend\View\Resolver\TemplatePathStack',
+                    ),
+                ),
+                'Zend\View\Resolver\TemplateMapResolver' => array(
+                    'parameters' => array(
+                        'map'  => array(
+                            'layout/layout' => __DIR__ . '/../view/layout/layout.twig',
+                        ),
+                    ),
+                ),
+                'Zend\View\Resolver\TemplatePathStack' => array(
+                    'parameters' => array(
+                        'paths'  => array(
+                            'application' => __DIR__ . '/../view',
+                        ),
+                        'defaultSuffix' => 'twig'   // change default extension from .phtml to .twig
+                    ),
+                ),
+                // Tell TwigRenderer how it should locate .twig files
+                'ZfTwig\TwigRenderer' => array(
+                    'parameters' => array(
+                        'resolver' => 'Zend\View\Resolver\AggregateResolver',
+                    ),
+                ),
+            ),
+        );
+```
