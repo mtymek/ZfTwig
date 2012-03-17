@@ -35,7 +35,7 @@ use Zend\EventManager\EventCollection,
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class TwigStrategy implements ListenerAggregate
+class TwigRenderingStrategy implements ListenerAggregate
 {
     /**
      * @var \Zend\Stdlib\CallbackHandler[]
@@ -58,7 +58,7 @@ class TwigStrategy implements ListenerAggregate
      * Constructor
      *
      * @param \ZfTwig\TwigRenderer $renderer
-     * @return \ZfTwig\TwigStrategy
+     * @return \ZfTwig\TwigRenderingStrategy
      */
     public function __construct(TwigRenderer $renderer)
     {
