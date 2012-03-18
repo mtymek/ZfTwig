@@ -16,6 +16,7 @@ return array(
             'ZfTwig\TwigEnvironment' => array(
                 'parameters' => array(
                     'loader' => 'ZfTwig\TemplateLoader',
+                    'broker' => 'Zend\View\HelperBroker',
                     'options' => array(
 
                     )
