@@ -66,7 +66,6 @@ Installation
         return array(
             'di' => array(
                 'instance' => array(
-
                     // setup other stuff...
                     // ...
 
@@ -102,3 +101,31 @@ Installation
                 ),
             );
     ```
+
+
+FAQ
+---
+
+**Q:** How can I pass configuration options to Twig_Environment class?
+
+**A:** You can easily configure it via Zend\Di:
+
+```php
+    <?php
+    return array(
+        'di' => array(
+            'instance' => array(
+                'ZfTwig\TwigEnvironment' => array(
+                    'parameters' => array(
+                        'options' => array(
+                            'cache' => 'data/cache/twig',
+                            'auto_reload' => true,
+                            'debug' => true
+                        )
+                    )
+                )
+            )
+        )
+    );
+```
+
