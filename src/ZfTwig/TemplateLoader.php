@@ -39,7 +39,7 @@ class TemplateLoader implements \Twig_LoaderInterface
         }
 
         if (null !== $name) {
-            return $this->templateResolver->resolve($name, $this);
+            return $this->templateResolver->resolve($name);
         }
 
         return $this->templateResolver;
