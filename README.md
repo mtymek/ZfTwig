@@ -74,7 +74,7 @@ Installation
                     'Zend\View\Resolver\AggregateResolver' => array(
                         'injections' => array(
                             'Zend\View\Resolver\TemplateMapResolver',
-                            'Zend\View\Resolver\TemplatePathStack',
+                            'ZfTwig\TemplatePathStack',
                         ),
                     ),
                     'Zend\View\Resolver\TemplateMapResolver' => array(
@@ -84,12 +84,11 @@ Installation
                             ),
                         ),
                     ),
-                    'Zend\View\Resolver\TemplatePathStack' => array(
+                    'ZfTwig\TemplatePathStack' => array(
                         'parameters' => array(
                             'paths'  => array(
                                 'application' => __DIR__ . '/../view',
                             ),
-                            'defaultSuffix' => 'twig'   // change default extension from .phtml to .twig
                         ),
                     ),
                     // Tell TwigRenderer how it should locate .twig files
