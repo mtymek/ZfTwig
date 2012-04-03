@@ -207,6 +207,11 @@ class TwigRenderer implements ZendViewRenderer
         $vars = $this->vars()->getArrayCopy();
 
         $name = $this->resolver($nameOrModel);
+        if(empty($name)) {
+            throw new Exception\NotFoundException(
+                "Can't resolve template '$nameOrModel'."
+            );
+        }
 
         $content = $this->getEnvironment()->render($name, $vars);
         return $this->getFilterChain()->filter($content); // filter output
