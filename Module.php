@@ -2,11 +2,11 @@
 
 namespace ZfTwig;
 
-use Zend\Module\Manager,
+use Zend\ModuleManager\ModuleManager,
     Zend\EventManager\StaticEventManager,
-    Zend\Module\Consumer\AutoloaderProvider;
+    Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 
-class Module implements AutoloaderProvider
+class Module implements AutoloaderProviderInterface
 {
 
     public function getAutoloaderConfig()
