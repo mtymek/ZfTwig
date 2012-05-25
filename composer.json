@@ -1,0 +1,18 @@
+{
+    "name": "mtymek/ZfTwig",
+    "type": "library",
+    "description": "This Zend Framework 2 module allows you to use Twig, the flexible, fast, and secure template language for PHP (http://twig.sensiolabs.org/) in your projects with support for Zend view helpers.",
+    "keywords": ["module", "view", "templating", "twig"],
+    "homepage": "http://github.com/mtymek/ZfTwig",
+    "license": "New BSD",
+    "authors": [
+        {
+            "name": "Mateusz Tymek",
+            "homepage": "http://mateusztymek.pl"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "twig/twig": "1.6.4"
+    }
+}
